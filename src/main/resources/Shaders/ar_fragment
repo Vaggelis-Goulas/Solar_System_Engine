@@ -1,0 +1,21 @@
+#version 330 core
+
+in vec4 vColor;
+in vec2 vTexCoord;
+
+out vec4 FragColor;
+
+uniform sampler2D texture1;
+uniform int useTexture;
+
+void main() {
+    if (useTexture == 1) {
+        // Alpha-covered glyph: multiply luminance by tint.
+        float alpha = texture(texture1, vTexCoord).r;
+        vec3 col = vColor.rgb;
+        // Slight edge boost for a scan-rich holographic look.
+        FragColor = vec4(col, alpha * vColor.a);
+    } else {
+        FragColor = vColor;
+    }
+}

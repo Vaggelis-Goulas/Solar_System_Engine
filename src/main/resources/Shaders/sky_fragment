@@ -1,0 +1,28 @@
+#version 330 core
+
+in vec3 TexCoord;
+out vec4 FragColor;
+
+uniform sampler2D skybox;
+
+vec2 sampleSphericalMap(vec3 v)
+{
+    vec2 uv = vec2(atan(v.z, v.x), asin(v.y));
+    uv *= vec2(0.1591, 0.3183); // inverse atan
+    uv += 0.5;
+    return uv;
+}
+
+void main()
+{
+    vec2 uv = sampleSphericalMap(normalize(TexCoord));
+    vec3 color = texture(skybox, uv).rgb;
+
+    // Make stars brighter
+    float brightness = dot(color, vec3(0.299, 0.587, 0.114));
+    if (brightness > 0.1) {
+        color *= 2.0;
+    }
+
+    FragColor = vec4(color, 1.0);
+}

@@ -1,0 +1,22 @@
+#version 330 core
+
+layout (location = 0) in vec2 aPos;      // pixels, top-left origin
+layout (location = 1) in vec4 aColor;    // RGBA
+layout (location = 2) in vec2 aTexCoord;
+
+out vec4 vColor;
+out vec2 vTexCoord;
+
+uniform vec3 screenSize;   // (width, height, unused)
+
+void main() {
+    // Pixel -> NDC (flip Y since pixel origin is top-left).
+    vec2 ndc = vec2(aPos.x / screenSize.x * 2.0 - 1.0,
+                    1.0 - aPos.y / screenSize.y * 2.0);
+
+    // Keep the HUD crisp: don't apply any smoothing offsets.
+    gl_Position = vec4(ndc, 0.0, 1.0);
+
+    vColor = aColor;
+    vTexCoord = aTexCoord;
+}

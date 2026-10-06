@@ -1,0 +1,18 @@
+#version 330 core
+
+in vec2 TexCoord;
+out vec4 FragColor;
+
+uniform vec3 color;
+
+void main()
+{
+    // Simple star color with slight variation based on position
+    vec3 starColor = color;
+
+    // Subtle twinkle centered above 1.0 so stars shimmer between faint-bright and bright.
+    float twinkle = sin(gl_FragCoord.x * 0.1 + gl_FragCoord.y * 0.1) * 0.1 + 1.05;
+    starColor *= twinkle;
+
+    FragColor = vec4(starColor, 1.0);
+}
